@@ -13,6 +13,11 @@ class Miscellaneous(commands.Cog):
             response = "Sai is a bobas!"
         await ctx.send(response)
 
+    @commands.command(name="hello", help="Says hello")
+    async def say_hello(self, ctx):
+        response = "Hello!"
+        await ctx.send(response)
+
 
 def setup(bot):
     bot.add_cog(Miscellaneous(bot))

@@ -10,6 +10,7 @@ GUILD = os.getenv("DISCORD_GUILD")
 bot = commands.Bot(command_prefix="!")
 
 bot.load_extension("cogs.misc")
+bot.load_extension("cogs.food")
 
 
 @bot.event
