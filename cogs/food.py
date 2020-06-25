@@ -72,10 +72,11 @@ class Food(commands.Cog):
                         myfile.write("drink\n")
 
     @commands.command(name="food", help="Lists foods in recipe book")
-    async def list(self, ctx, food):
+    async def listFoods(self, ctx, food):
         recipes = "./data/recipes.dat"
         links, foodTypes = np.loadtxt(recipes, unpack=True, delimiter=",", dtype="str")
         counter = 0
+
         if str(food) == "all":
             for i in range(len(links)):
                 counter += 1
