@@ -1,3 +1,5 @@
 /.env
 /cogs/__pycache__/
 /data/
+/tmp.jpg
+/cogs/functions/__pycache__/
