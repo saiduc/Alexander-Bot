@@ -1,6 +1,9 @@
 from discord.ext import commands, tasks
+from discord import File
 from datetime import date, datetime
 import numpy as np
+from cogs.functions import calendar
+import os
 
 
 class Exercise(commands.Cog):
@@ -33,6 +36,24 @@ class Exercise(commands.Cog):
         with open(log, "a") as myfile:
             item = str(ctx.author)[:-5] + "," + str(date.today()) + "\n"
             myfile.write(item)
+
+    @commands.command(name="graph", help="Makes calendar of exercise")
+    async def makeGraph(self, ctx, name):
+        if str(name) == "Kasia" or str(name) == "kasia":
+            name = "Kasiakoo"
+        elif str(name) == "Zuzia" or str(name) == "zuzia":
+            name = "zuziek424"
+        elif str(name) == "Sai" or str(name) == "sai":
+            name = "SaiDuc"
+        elif str(name) == "Zbyszek" or str(name) == "zbyszek":
+            name = "zztop66"
+        else:
+            await ctx.send("User not found")
+            return
+        days, months = calendar.getData(name)
+        calendar.plot_calendar(days, months)
+        with open(r"./tmp.jpg", "rb") as image:
+            await ctx.send(name+"'s graph:", file=File(image))
 
     @tasks.loop(seconds=60.0)
     async def reminder(self):
