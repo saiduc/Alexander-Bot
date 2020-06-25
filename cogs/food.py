@@ -1,13 +1,11 @@
 from discord.ext import commands
+import numpy as np
 import validators
 
 
 class Food(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    def checkReaction():
-        pass
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -72,6 +70,23 @@ class Food(commands.Cog):
                     await channel.send("You chose drink!")
                     with open(recipes, "a") as myfile:
                         myfile.write("drink\n")
+
+    @commands.command(name="food", help="Lists foods in recipe book")
+    async def list(self, ctx, food):
+        recipes = "./data/recipes.dat"
+        links, foodTypes = np.loadtxt(recipes, unpack=True, delimiter=",", dtype="str")
+        counter = 0
+        if str(food) == "all":
+            for i in range(len(links)):
+                counter += 1
+                await ctx.send(links[i])
+        else:
+            for i in range(len(links)):
+                if foodTypes[i] == str(food):
+                    counter += 1
+                    await ctx.send(links[i])
+        if counter == 0:
+            await ctx.send("No items found!")
 
 
 def setup(bot):
