@@ -3,7 +3,6 @@ from discord import File
 from datetime import date, datetime
 import numpy as np
 from cogs.functions import calendar
-import os
 
 
 class Exercise(commands.Cog):
@@ -38,7 +37,7 @@ class Exercise(commands.Cog):
             myfile.write(item)
 
     @commands.command(name="graph", help="Makes calendar of exercise")
-    async def makeGraph(self, ctx, name):
+    async def make_graph(self, ctx, name):
         if str(name) == "Kasia" or str(name) == "kasia":
             name = "Kasiakoo"
         elif str(name) == "Zuzia" or str(name) == "zuzia":
