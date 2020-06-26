@@ -49,7 +49,7 @@ class Exercise(commands.Cog):
         else:
             await ctx.send("User not found")
             return
-        days, months = calendar.getData(name)
+        days, months = calendar.get_data(name)
         calendar.plot_calendar(days, months)
         with open(r"./tmp.jpg", "rb") as image:
             await ctx.send(name+"'s graph:", file=File(image))
