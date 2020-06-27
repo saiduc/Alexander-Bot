@@ -1,6 +1,7 @@
 from discord.ext import commands
 import numpy as np
 import validators
+import discord
 
 
 class Food(commands.Cog):
@@ -81,6 +82,14 @@ class Food(commands.Cog):
             for i in range(len(links)):
                 counter += 1
                 await ctx.send(links[i])
+
+        elif str(food) == "embed":
+            embed = discord.Embed(title="Recipe Book")
+            for i in range(len(links)):
+                counter += 1
+                embed.add_field(name=foodTypes[i].title(), value=links[i], inline=False)
+            await ctx.send(embed=embed)
+
         else:
             for i in range(len(links)):
                 if foodTypes[i] == str(food):
