@@ -2,7 +2,7 @@ from discord.ext import commands, tasks
 from discord import File
 from datetime import date, datetime
 import numpy as np
-from cogs.functions import calendar
+from functions import calendar
 
 
 class Exercise(commands.Cog):
