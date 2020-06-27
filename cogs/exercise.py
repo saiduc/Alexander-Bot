@@ -58,7 +58,7 @@ class Exercise(commands.Cog):
     async def reminder(self):
         message_channel = self.bot.get_channel(725329702985662505)
         current_time = datetime.now().strftime("%H:%M:%S")
-        if current_time[:2] == "19" and current_time[3:5] == "00":
+        if current_time[:2] == "19" and current_time[3:5] == "00" and datetime.today().weekday() < 5:
             log = "./data/log.dat"
             names, times = np.loadtxt(log, dtype="str", unpack=True, delimiter=",")
             members = ["Kasiakoo", "SaiDuc", "zuziek424", "zztop66"]
