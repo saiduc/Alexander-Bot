@@ -46,6 +46,8 @@ class Exercise(commands.Cog):
             name = "SaiDuc"
         elif str(name) == "Zbyszek" or str(name) == "zbyszek":
             name = "zztop66"
+        elif str(name) == "Anna" or str(name) == "anna":
+            name = "AnetaK"
         else:
             await ctx.send("User not found")
             return
@@ -61,7 +63,7 @@ class Exercise(commands.Cog):
         if current_time[:2] == "19" and current_time[3:5] == "00" and datetime.today().weekday() < 5:
             log = "./data/log.dat"
             names, times = np.loadtxt(log, dtype="str", unpack=True, delimiter=",")
-            members = ["Kasiakoo", "SaiDuc", "zuziek424", "zztop66"]
+            members = ["Kasiakoo", "SaiDuc", "zuziek424", "zztop66", "AnetaK"]
             people = []
             for i in range(len(times)):
                 if times[i] == str(date.today()):
