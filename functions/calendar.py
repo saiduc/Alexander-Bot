@@ -16,6 +16,8 @@ def plot_calendar(days, months):
     for i in range(len(weekend_days)):
         ax.add_patch(Rectangle((weekend_days[i], weekend_months[i]), width=.9, height=.9, color='gray', alpha=.3))
 
+    ax.add_patch(Rectangle((30, 6), width=.9, height=.9, color='gray', alpha=.3))
+
     for d, m in zip(days, months):
         ax.add_patch(Rectangle((d, m),
                                width=0.9, height=0.9, color='C0'))
