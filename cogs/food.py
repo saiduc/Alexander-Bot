@@ -85,9 +85,20 @@ class Food(commands.Cog):
 
         elif str(food) == "embed":
             embed = discord.Embed(title="Recipe Book")
+
+            # types = ""
+            # sites = ""
+            # for i in range(len(foodTypes)):
+            #     types += foodTypes[i].title()+"\n"
+            #     sites += links[i]+" \n"
+            # embed.add_field(name="Type", value=types, inline=True)
+            # embed.add_field(name="Links", value=sites, inline=True)
+            # counter = range(len(links))
+
             for i in range(len(links)):
                 counter += 1
                 embed.add_field(name=foodTypes[i].title(), value=links[i], inline=False)
+
             await ctx.send(embed=embed)
 
         else:
