@@ -1,6 +1,8 @@
 from discord.ext import commands
 import discord
+from discord.utils import get
 from imdb import IMDb
+import numpy as np
 
 
 class Film(commands.Cog):
@@ -31,6 +33,11 @@ class Film(commands.Cog):
         channel = await self.bot.fetch_channel(payload.channel_id)
         message = await channel.fetch_message(payload.message_id)
         user = await self.bot.fetch_user(payload.user_id)
+        reactions_yes = get(message.reactions, emoji="\U0001F44D")
+        reactions_no = get(message.reactions, emoji="\U0001F44E")
+        count = reactions_yes.count + reactions_no.count
+        if count > 3:
+            return
         emoji = payload.emoji
         watchlist = "./data/watchlist.dat"
 
@@ -46,6 +53,63 @@ class Film(commands.Cog):
                     with open(watchlist, "w") as writeFile:
                         writeFile.writelines([item for item in lines[:-1]])
 
+    @commands.command(name="watchlist", help="Lists the watchlist")
+    async def list_watchlist(self, ctx, item):
+        watchlist = "./data/watchlist.dat"
+        title, kind, year, genre, rating = np.loadtxt(watchlist, unpack=True, delimiter=",", dtype="str")
+        counter = 0
+
+        if type(title) != np.ndarray:
+            title = [title]
+            kind = [kind]
+            year = [year]
+            genre = [genre]
+            rating = [rating]
+
+        if str(item) == "all":
+            embed = discord.Embed(title="Watchlist")
+
+            for i in range(len(title)):
+                counter += 1
+                string1 = title[i]
+                string2 = "**Type:** " + kind[i] + " **Year:** " + year[i] + " **Genre:** " + genre[i] + " **Score:** " + rating[i]
+                
+                embed.add_field(name=string1, value=string2, inline=False)
+
+            await ctx.send(embed=embed)
+
+            
+        if str(item) == "films":
+            embed = discord.Embed(title="Watchlist: Films")
+
+            for i in range(len(title)):
+                if kind[i] == "Movie":
+                    counter += 1
+                    string1 = title[i]
+                    string2 = "**Year:** " + year[i] + " **Genre:** " + genre[i] + " **Score:** " + rating[i]
+                
+                    embed.add_field(name=string1, value=string2, inline=False)
+
+            if counter != 0:
+                await ctx.send(embed=embed)
+
+        if str(item) == "tv" or str(item) == "TV":
+            embed = discord.Embed(title="Watchlist: TV Shows")
+
+            for i in range(len(title)):
+                if "Tv" in kind[i] or "TV" in kind[i] or "tv" in kind[i]:
+                    counter += 1
+                    string1 = title[i]
+                    string2 = "**Type:** " + kind[i] + " **Year:** " + year[i] + " **Genre:** " + genre[i] + " **Score:** " + rating[i]
+                
+                    embed.add_field(name=string1, value=string2, inline=False)
+
+            if counter != 0:
+                await ctx.send(embed=embed)
+
+        if counter == 0:
+            await ctx.send("No items found!")
+
 
     def make_embed(self, name):
         watchlist = "./data/watchlist.dat"
@@ -56,9 +120,24 @@ class Film(commands.Cog):
             title = movie["title"]
             year = movie["year"]
             kind = movie["kind"].title()
-            genres = movie["genres"]
-            cover = movie["full-size cover url"]
-            outline = movie["plot outline"]
+            genres = movie["genres"][0]
+            try:
+                cover = movie["full-size cover url"]
+            except:
+                cover = None
+            try:
+                outline = movie["plot outline"]
+                if len(outline) > 500:
+                    outline = outline[:500] + "..."
+            except:
+                try:
+                    outline = movie["plot"]
+                    if type(outline) == list:
+                        outline = outline[0]
+                    if len(outline) > 500:
+                        outline = outline[:500] + "..."
+                except:
+                    outline = "No synopsis found!"
             cast = movie["cast"][:4]
             rating = movie["rating"]
             language = movie["languages"][0]
@@ -69,13 +148,14 @@ class Film(commands.Cog):
         embed = discord.Embed(title=title)
 
         try:
-            embed.set_thumbnail(url=cover)
+            if cover != None:
+                embed.set_thumbnail(url=cover)
             embed.add_field(name="Synopsis", value=outline, inline=False)
             embed.add_field(name="Cast", value=f"{cast[0]}, {cast[1]}, {cast[2]}, {cast[3]}", inline=False)
             embed.add_field(name="General Details",
                             value=f"Type: {kind}\n"
                                   f"Year: {year}\n"
-                                  f"Genre: {genres[0]}",
+                                  f"Genre: {genres}",
                             inline=True)
             embed.add_field(name="Other Details",
                             value=f"Score: {rating}\n"
@@ -87,7 +167,7 @@ class Film(commands.Cog):
             embed.add_field(name="Error", value=msg, inline=False)
 
         with open(watchlist, "a") as myFile:
-            myFile.write(title + "\n")
+            myFile.write(title + "," + kind + "," + str(year) + "," + genres + "," + str(rating) + "\n")
 
         return embed
 
