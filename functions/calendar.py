@@ -11,6 +11,21 @@ def plot_calendar(days, months):
     # non days are grayed
 
     ax = plt.gca().axes
+    ax.add_patch(Rectangle((29, 2), width=.9, height=.9,
+                           color='black', alpha=.3))
+    ax.add_patch(Rectangle((30, 2), width=.9, height=.9,
+                           color='black', alpha=.5))
+    ax.add_patch(Rectangle((31, 2), width=.9, height=.9,
+                           color='black', alpha=.5))
+    ax.add_patch(Rectangle((31, 4), width=.9, height=.9,
+                           color='black', alpha=.5))
+    ax.add_patch(Rectangle((31, 6), width=.9, height=.9,
+                           color='black', alpha=.5))
+    ax.add_patch(Rectangle((31, 9), width=.9, height=.9,
+                           color='black', alpha=.5))
+    ax.add_patch(Rectangle((31, 11), width=.9, height=.9,
+                           color='black', alpha=.5))
+
     weekend_days, weekend_months = get_weekends(2020)
 
     for i in range(len(weekend_days)):
