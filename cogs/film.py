@@ -3,6 +3,7 @@ import discord
 from discord.utils import get
 from imdb import IMDb
 import numpy as np
+import time
 
 
 class Film(commands.Cog):
@@ -33,25 +34,27 @@ class Film(commands.Cog):
         channel = await self.bot.fetch_channel(payload.channel_id)
         message = await channel.fetch_message(payload.message_id)
         user = await self.bot.fetch_user(payload.user_id)
-        reactions_yes = get(message.reactions, emoji="\U0001F44D")
-        reactions_no = get(message.reactions, emoji="\U0001F44E")
-        count = reactions_yes.count + reactions_no.count
-        if count > 3:
-            return
-        emoji = payload.emoji
-        watchlist = "./data/watchlist.dat"
 
         if user != self.bot.user:
-            if "Add to Watch List?" in str(message.content):
-                r = str(str(emoji).encode("unicode-escape").decode("ASCII"))
-                if r == r"\U0001f44d":
-                    await channel.send("Adding to Watch List!")
-                elif r == r"\U0001f44e":
-                    await channel.send("Not adding to Watch List!")
-                    with open(watchlist) as readFile:
-                        lines = readFile.readlines()
-                    with open(watchlist, "w") as writeFile:
-                        writeFile.writelines([item for item in lines[:-1]])
+            reactions_yes = get(message.reactions, emoji="\U0001F44D")
+            reactions_no = get(message.reactions, emoji="\U0001F44E")
+            count = reactions_yes.count + reactions_no.count
+            if count > 3:
+                return
+            emoji = payload.emoji
+            watchlist = "./data/watchlist.dat"
+
+            if user != self.bot.user:
+                if "Add to Watch List?" in str(message.content):
+                    r = str(str(emoji).encode("unicode-escape").decode("ASCII"))
+                    if r == r"\U0001f44d":
+                        await channel.send("Adding to Watch List!")
+                    elif r == r"\U0001f44e":
+                        await channel.send("Not adding to Watch List!")
+                        with open(watchlist) as readFile:
+                            lines = readFile.readlines()
+                        with open(watchlist, "w") as writeFile:
+                            writeFile.writelines([item for item in lines[:-1]])
 
     @commands.command(name="watchlist", help="Lists the watchlist")
     async def list_watchlist(self, ctx, item):
