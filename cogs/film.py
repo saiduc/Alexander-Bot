@@ -59,6 +59,7 @@ class Film(commands.Cog):
     @commands.command(name="watchlist", help="Lists the watchlist")
     async def list_watchlist(self, ctx, item):
         watchlist = "./data/watchlist.dat"
+        completed = "./data/completed.dat"
         title, kind, year, genre, rating = np.loadtxt(watchlist, unpack=True, delimiter=",", dtype="str")
         counter = 0
 
@@ -71,6 +72,19 @@ class Film(commands.Cog):
 
         if str(item) == "all":
             embed = discord.Embed(title="Watchlist")
+
+            for i in range(len(title)):
+                counter += 1
+                string1 = title[i]
+                string2 = "**Type:** " + kind[i] + " **Year:** " + year[i] + " **Genre:** " + genre[i] + " **Score:** " + rating[i]
+
+                embed.add_field(name=string1, value=string2, inline=False)
+
+            await ctx.send(embed=embed)
+
+        if str(item) == "completed":
+            title, kind, year, genre, rating = np.loadtxt(completed, unpack=True, delimiter=",", dtype="str")
+            embed = discord.Embed(title="Watchlist: Completed")
 
             for i in range(len(title)):
                 counter += 1
