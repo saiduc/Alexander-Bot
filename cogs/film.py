@@ -76,12 +76,11 @@ class Film(commands.Cog):
                 counter += 1
                 string1 = title[i]
                 string2 = "**Type:** " + kind[i] + " **Year:** " + year[i] + " **Genre:** " + genre[i] + " **Score:** " + rating[i]
-                
+
                 embed.add_field(name=string1, value=string2, inline=False)
 
             await ctx.send(embed=embed)
 
-            
         if str(item) == "films":
             embed = discord.Embed(title="Watchlist: Films")
 
@@ -90,7 +89,7 @@ class Film(commands.Cog):
                     counter += 1
                     string1 = title[i]
                     string2 = "**Year:** " + year[i] + " **Genre:** " + genre[i] + " **Score:** " + rating[i]
-                
+
                     embed.add_field(name=string1, value=string2, inline=False)
 
             if counter != 0:
@@ -104,7 +103,7 @@ class Film(commands.Cog):
                     counter += 1
                     string1 = title[i]
                     string2 = "**Type:** " + kind[i] + " **Year:** " + year[i] + " **Genre:** " + genre[i] + " **Score:** " + rating[i]
-                
+
                     embed.add_field(name=string1, value=string2, inline=False)
 
             if counter != 0:
@@ -113,9 +112,7 @@ class Film(commands.Cog):
         if counter == 0:
             await ctx.send("No items found!")
 
-
-    def make_embed(self, name):
-        watchlist = "./data/watchlist.dat"
+    def get_info(self, name):
         ia = IMDb()
         try:
             top_result = ia.search_movie(name)[0]
@@ -148,6 +145,13 @@ class Film(commands.Cog):
         except:
             pass
 
+        return title, year, kind, genres, cover, outline, cast, rating, language, runtimes
+
+    def make_embed(self, name):
+        watchlist = "./data/watchlist.dat"
+
+        title, year, kind, genres, cover, outline, cast, rating, language, runtimes = self.get_info(name)
+
         embed = discord.Embed(title=title)
 
         try:
@@ -173,6 +177,32 @@ class Film(commands.Cog):
             myFile.write(title + "," + kind + "," + str(year) + "," + genres + "," + str(rating) + "\n")
 
         return embed
+
+    @commands.command(name="completed", help="Marks an item on watchlist as completed")
+    async def complete(self, ctx, item):
+        user_input = str(item)
+        title, *rest = self.get_info(user_input)
+        watchlist = "./data/watchlist.dat"
+        completed = "./data/completed.dat"
+
+        with open(watchlist, "r") as readFile:
+            lines = readFile.readlines()
+
+        with open(watchlist, "w") as writeFile:
+            writeFile.writelines([item for item in lines if title not in item])
+
+        with open(completed, "a") as myFile:
+            myFile.writelines([item for item in lines if title in item])
+
+        with open(watchlist, "r") as readFile:
+            new_lines = readFile.readlines()
+
+        if len(new_lines) < len(lines):
+            message = "Removed " + title + " from Watchlist!"
+            await ctx.send(message)
+        else:
+            message = "Could not find " + title + " in Watchlist."
+            await ctx.send(message)
 
 
 def setup(bot):
