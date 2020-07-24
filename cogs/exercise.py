@@ -2,7 +2,7 @@ from discord.ext import commands, tasks
 from discord import File
 from datetime import date, datetime
 import numpy as np
-from functions import calendar
+from functions import cal
 
 
 class Exercise(commands.Cog):
@@ -51,8 +51,8 @@ class Exercise(commands.Cog):
         else:
             await ctx.send("User not found")
             return
-        days, months = calendar.get_data(name)
-        calendar.plot_calendar(days, months)
+        days, months = cal.get_data(name)
+        cal.plot_calendar(days, months)
         with open(r"./tmp.jpg", "rb") as image:
             await ctx.send(name+"'s graph:", file=File(image))
 
