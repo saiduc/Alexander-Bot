@@ -1,0 +1,32 @@
+#+TITLE: Alexander Bot - A Simple Discord Bot
+#+AUTHOR: Sai Pandian
+
+This is a simple discord bot written for a private discord server. It provides a
+few functions that are suited to my needs. The bot has been written to be fairly
+modular, so it's possible to turn off and on cogs as necessary. This bot has
+been written entirely in Python.
+
+* Usage
+You can clone this repository with the necessary submodules with:
+#+begin_src bash
+git clone --recursive https://github.com/saiduc/Alexander-Bot
+#+end_src
+
+After all the requirements have been met, you can run the bot.py Python file:
+#+begin_src bash
+python bot.py
+#+end_src
+
+* Requirements
+There is a requirements.txt file, which contains all the necessary Python
+packages. You can install all the packages in it with:
+#+begin_src bash
+pip install -r requirements.txt
+#+end_src
+
+Ensure the repository was cloned recursively, so that the submodules are also
+cloned correctly.
+
+* License
+This project is licensed under the terms of the MIT license. Do whatever you want with it!
+
