@@ -192,7 +192,7 @@ class Film(commands.Cog):
 
         return embed
 
-    @commands.command(name="completed", help="Marks an item on watchlist as completed")
+    @commands.command(name="complete", help="Marks an item on watchlist as completed")
     async def complete(self, ctx, item):
         user_input = str(item)
         title, *rest = self.get_info(user_input)
