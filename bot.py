@@ -12,7 +12,7 @@ bot.load_extension("cogs.misc")
 bot.load_extension("cogs.food")
 # bot.load_extension("cogs.exercise")
 bot.load_extension("cogs.film")
-bot.load_extension("cogs.politics")
+bot.load_extension("cogs.politcs")
 bot.load_extension("cogs.environment")
 
 
